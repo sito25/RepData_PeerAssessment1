@@ -8,18 +8,72 @@ output:
 
 ## Loading and preprocessing the data
 
-
+```{r loading_and_preprocessing}
+dataFile <- read.table("activity.csv",sep=",",header=TRUE)
+nona_dataFile <- na.omit(dataFile)
+```
 
 ## What is mean total number of steps taken per day?
 
+```{r mean}
+library(plyr)
+steps_per_day<-ddply(nona_dataFile,"date",numcolwise(sum))
+hist(steps_per_day$steps)
+mean_steps<-mean(steps_per_day$steps)
+median_steps<-median(steps_per_day$steps)
+```
 
+The mean of steps per day is `r mean_steps`, and the median `r median_steps`
 
 ## What is the average daily activity pattern?
 
+```{r activity}
+steps_per_day$date <- as.Date( steps_per_day$date, '%Y-%m-%d')
+require(ggplot2)
+ggplot(steps_per_day, aes(date, steps)) + geom_line()
+max_steps_interval<-steps_per_day$interval[steps_per_day$steps==(max(steps_per_day$steps))]
+```
 
+On average across all the days in the dataset, the 5-minute interval which contains the maximum number of steps is `r max_steps_interval`
 
 ## Imputing missing values
 
+```{r na_values}
+incomplete_cases<-nrow(dataFile)-nrow(na.omit(dataFile))
 
+#Filling in all of the missing values in the dataset with 0
+
+newDataFile<-dataFile 
+newDataFile$steps[is.na(dataFile$steps)]<-0
+
+#calculation with all values
+
+steps_per_day_new<-ddply(newDataFile,"date",numcolwise(sum))
+hist(steps_per_day_new$steps)
+mean_steps_new<-mean(steps_per_day_new$steps)
+median_steps_new<-median(steps_per_day_new$steps)
+```
+
+Total number of rows with NAs: `r incomplete_cases`.
+The new mean of steps per day is `r mean_steps_new`, and the median `r median_steps_new`
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+```{r differences}
+steps_per_day_new$date <- as.Date( steps_per_day_new$date, '%Y-%m-%d')
+
+#Create new column "day"
+
+steps_per_day_new$day<-""
+
+for (i in 1:nrow(steps_per_day_new)) { 
+  wd<-weekdays(steps_per_day_new$date[i]) 
+  if (wd=="sábado" || wd=="domingo") { 
+    steps_per_day_new$day[i]<-"weekend" 
+  } else { 
+    steps_per_day_new$day[i]<-"weekday" 
+  } 
+}
+
+qplot(date,steps,data=steps_per_day_new,facets=.~day)+ geom_line()
+```
