@@ -15,7 +15,7 @@ nona_dataFile <- na.omit(dataFile)
 ```r
 library(plyr)
 steps_per_day<-ddply(nona_dataFile,"date",numcolwise(sum))
-hist(steps_per_day$steps)
+hist(steps_per_day$steps,main = "Steps per day",xlab = "Steps")
 ```
 
 ![](PA1_template_files/figure-html/mean-1.png) 
@@ -65,7 +65,7 @@ newDataFile$steps[is.na(dataFile$steps)]<-0
 #calculation with all values
 
 steps_per_day_new<-ddply(newDataFile,"date",numcolwise(sum))
-hist(steps_per_day_new$steps)
+hist(steps_per_day_new$steps,main="Steps per day filling incomplete cases",xlab="Steps")
 ```
 
 ![](PA1_template_files/figure-html/na_values-1.png) 
@@ -73,7 +73,14 @@ hist(steps_per_day_new$steps)
 ```r
 mean_steps_new<-mean(steps_per_day_new$steps)
 median_steps_new<-median(steps_per_day_new$steps)
+
+
+par(mfrow=c(1,2))
+hist(steps_per_day$steps,main = "Steps/day",xlab = "Steps")
+hist(steps_per_day_new$steps,main="Steps/day filling NA cases",xlab="Steps")
 ```
+
+![](PA1_template_files/figure-html/na_values-2.png) 
 
 Total number of rows with NAs: 2304.
 The new mean of steps per day is 9354.2295082, and the median 1.0395\times 10^{4}
