@@ -9,7 +9,7 @@ dataFile <- read.table("activity.csv",sep=",",header=TRUE)
 nona_dataFile <- na.omit(dataFile)
 ```
 
-## What is mean total number of steps taken per day?
+## What is the mean total number of steps taken per day?
 
 
 ```r

@@ -69,8 +69,8 @@ img {
 <pre class="r"><code>dataFile &lt;- read.table(&quot;activity.csv&quot;,sep=&quot;,&quot;,header=TRUE)
 nona_dataFile &lt;- na.omit(dataFile)</code></pre>
 </div>
-<div id="what-is-mean-total-number-of-steps-taken-per-day" class="section level2">
-<h2>What is mean total number of steps taken per day?</h2>
+<div id="what-is-the-mean-total-number-of-steps-taken-per-day" class="section level2">
+<h2>What is the mean total number of steps taken per day?</h2>
 <pre class="r"><code>library(plyr)
 steps_per_day&lt;-ddply(nona_dataFile,&quot;date&quot;,numcolwise(sum))
 hist(steps_per_day$steps,main = &quot;Steps per day&quot;,xlab = &quot;Steps&quot;)</code></pre>
